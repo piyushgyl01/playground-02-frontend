@@ -36,11 +36,11 @@ export default function Navbar() {
                   Add Movie
                 </Link>
               </li>
-              <li class="nav-item">
+              {/* <li class="nav-item">
                 <Link class="nav-link" to="/reports">
                   Reports
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

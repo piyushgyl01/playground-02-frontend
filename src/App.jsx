@@ -28,13 +28,13 @@ function App() {
           <p>Add your favorite movie anytime-anywhere.</p>
           <Link className="btn btn-primary" to={"/add-movie"}>Add Movie</Link>
         </section>
-        <section className="my-5 text-center">
+        {/* <section className="my-5 text-center">
           <h1>Movie Report</h1>
           <p>Explore our latest movie report to gain insights into our bollywood's performance and growth.</p>
           <Link className="btn btn-primary" to={"/reports"}>
             Movie Report
           </Link>
-        </section>
+        </section> */}
       </main>
     </>
   );

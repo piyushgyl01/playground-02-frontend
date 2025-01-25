@@ -1,8 +1,7 @@
 export default function Report() {
-    return (
-      <>
-        <h1>Report</h1>
-      </>
-    );
-  }
-  
+  return (
+    <>
+      <h1>Report</h1>
+    </>
+  );
+}
