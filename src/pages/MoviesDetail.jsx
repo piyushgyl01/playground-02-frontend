@@ -31,7 +31,7 @@ export default function MoviesDetail() {
           body: JSON.stringify(editedData),
         }
       );
-      
+
       if (response.ok) {
         setToastMessage("Movie details updated successfully!");
         setShowToast(true);
@@ -48,16 +48,28 @@ export default function MoviesDetail() {
   };
 
   const movie = data?.find((movie) => movie._id === movieID);
-  
+
   return (
     <>
       <Navbar />
       {showToast && (
-        <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
-          <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div
+          className="position-fixed top-0 end-0 p-3"
+          style={{ zIndex: 1050 }}
+        >
+          <div
+            className="toast show"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
             <div className="toast-header">
               <strong className="me-auto">Notification</strong>
-              <button type="button" className="btn-close" onClick={() => setShowToast(false)}></button>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowToast(false)}
+              ></button>
             </div>
             <div className="toast-body">{toastMessage}</div>
           </div>

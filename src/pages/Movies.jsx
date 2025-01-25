@@ -9,8 +9,10 @@ export default function Movies() {
     directors: "",
     genre: "",
   });
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
 
-  const { data, loading, error } = useFetch(
+  const { data, loading, error, refetch } = useFetch(
     "https://playground-02-backend.vercel.app/movies"
   );
 
@@ -25,13 +27,26 @@ export default function Movies() {
 
   const handleDelete = async (movieID) => {
     try {
-      await fetch(
+      const response = await fetch(
         `https://playground-02-backend.vercel.app/movies/${movieID}`,
         {
           method: "DELETE",
         }
       );
+      refetch();
+
       console.log("MOVIE DELETED SUCCESSFULLY");
+
+      if (response.ok) {
+        setToastMessage("Movie deleted successfully!");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        refetch();
+      } else {
+        setToastMessage("Failed to delete the movie");
+        setShowToast(true);
+        throw new Error();
+      }
     } catch (error) {
       console.log("Failed to delete the movie");
     }
@@ -40,6 +55,29 @@ export default function Movies() {
   return (
     <>
       <Navbar />
+      {showToast && (
+        <div
+          className="position-fixed top-0 end-0 p-3"
+          style={{ zIndex: 1050 }}
+        >
+          <div
+            className="toast show"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header">
+              <strong className="me-auto">Notification</strong>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowToast(false)}
+              ></button>
+            </div>
+            <div className="toast-body">{toastMessage}</div>
+          </div>
+        </div>
+      )}
       <main className="container my-5">
         <h1 className="text-center display-3">Movies</h1>
         <div className="row">
@@ -95,7 +133,9 @@ export default function Movies() {
                   </p>
                   <p className="card-text">
                     <strong>Release Date: </strong>
-                    {movie.releaseDate}
+                    {new Date(
+                      movie.releaseDate.split("T")[0]
+                    ).toLocaleDateString()}
                   </p>
                   <p className="card-text">
                     <strong>Director: </strong>

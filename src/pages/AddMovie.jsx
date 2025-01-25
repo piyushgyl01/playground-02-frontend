@@ -2,6 +2,8 @@ import Navbar from "../components/Navbar";
 import { useState } from "react";
 
 export default function AddMovie() {
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const [savedData, setSavedData] = useState({
     title: "",
     genre: "",
@@ -11,27 +13,62 @@ export default function AddMovie() {
 
   const handleCreate = async () => {
     try {
-      fetch("https://playground-02-backend.vercel.app/movies", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(savedData),
-      });
+      const response = await fetch(
+        "https://playground-02-backend.vercel.app/movies",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(savedData),
+        }
+      );
       console.log("POSTED SUCCESSFULLY");
-      setSavedData({
-        title: "",
-        genre: "",
-        releaseDate: "",
-        directors: "",
-      });
+      if (response.ok) {
+        setToastMessage("Movie details added successfully!");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        setSavedData({
+          title: "",
+          genre: "",
+          releaseDate: "",
+          directors: "",
+        });
+      } else {
+        throw new Error();
+      }
     } catch (error) {
+      setToastMessage("Failed to add movie details");
+      setShowToast(true);
       console.log("Not able to create a new movie");
     }
   };
   return (
     <>
       <Navbar />
+      {showToast && (
+        <div
+          className="position-fixed top-0 end-0 p-3"
+          style={{ zIndex: 1050 }}
+        >
+          <div
+            className="toast show"
+            role="alert"
+            aria-live="assertive"
+            aria-atomic="true"
+          >
+            <div className="toast-header">
+              <strong className="me-auto">Notification</strong>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowToast(false)}
+              ></button>
+            </div>
+            <div className="toast-body">{toastMessage}</div>
+          </div>
+        </div>
+      )}
       <main className="container my-5">
         <h1>Add Movie</h1>
         <h1 className="text-center mt-3"></h1>
