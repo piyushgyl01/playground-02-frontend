@@ -27,6 +27,38 @@ export default function Movies() {
       <Navbar />
       <main className="container my-5">
         <h1 className="text-center display-3">Movies</h1>
+        <div className="row">
+          <div className="col-md-6">
+            <label for="genreSelect" class="form-label">
+              Filter By Genre:
+            </label>
+            <select
+              class="form-select"
+              id="genreSelect"
+              aria-label="Default select example"
+            >
+              <option value={""}>All Genre</option>
+              <option value="Action">Action</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Drama">Drama</option>
+            </select>
+          </div>
+          <div className="col-md-6">
+            <label for="genreSelect" class="form-label">
+              Filter By Genre:
+            </label>
+            <select
+              class="form-select"
+              id="genreSelect"
+              aria-label="Default select example"
+            >
+              <option value={""}>All Genre</option>
+              <option value="Action">Action</option>
+              <option value="Comedy">Comedy</option>
+              <option value="Drama">Drama</option>
+            </select>
+          </div>
+        </div>
         {loading && <p className="text-center">Loading...</p>}
         {error && <p className="text-center">Error...</p>}
         {data && (

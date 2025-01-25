@@ -22,9 +22,12 @@ export default function MoviesDetail() {
       fetch(`https://playground-02-backend.vercel.app/movies/${movieID}`, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editedData),
       });
+      console.log("EDITED SUCCESSFULLY");
+      setEdit(false);
     } catch (error) {
       console.error("UNABLE TO EDIT THE DATA");
     }
@@ -72,13 +75,32 @@ export default function MoviesDetail() {
                   <label for="titleInput" class="form-label">
                     Movie Title:
                   </label>
-                  <input type="text" class="form-control" id="titleInput" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="titleInput"
+                    value={editedData.title}
+                    onChange={(e) =>
+                      setEditedData({ ...editedData, title: e.target.value })
+                    }
+                  />
                 </div>
                 <div class="mb-3">
                   <label for="releaseDate" class="form-label">
-                    Movie Director:
+                    Release Date:
                   </label>
-                  <input type="date" class="form-control" id="releaseDate" />
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="releaseDate"
+                    value={editedData.releaseDate}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        releaseDate: e.target.value,
+                      })
+                    }
+                  />
                 </div>
                 <div class="mb-3">
                   <label for="genreSelect" class="form-label">
@@ -88,6 +110,13 @@ export default function MoviesDetail() {
                     class="form-select form-select-lg mb-3"
                     aria-label="Medium select example"
                     id="genreSelect"
+                    value={editedData.genre}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        genre: e.target.value,
+                      })
+                    }
                   >
                     <option value="">Select Genre</option>
                     <option value="Action">Action</option>
@@ -103,13 +132,24 @@ export default function MoviesDetail() {
                     class="form-select form-select-lg mb-3"
                     aria-label="Medium select example"
                     id="directorSelect"
+                    value={editedData.directors}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        directors: e.target.value,
+                      })
+                    }
                   >
                     <option value="">Select Director</option>
                     <option value="John Doe">John Doe</option>
                     <option value="Jane Smith">Jane Smith</option>
                   </select>
                 </div>
-                <button type="submit" class="btn btn-primary">
+                <button
+                  onClick={() => handleEdit()}
+                  type="submit"
+                  class="btn btn-primary"
+                >
                   Save Changes
                 </button>
               </>
