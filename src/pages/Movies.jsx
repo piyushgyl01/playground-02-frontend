@@ -33,8 +33,6 @@ export default function Movies() {
           method: "DELETE",
         }
       );
-      refetch();
-
       console.log("MOVIE DELETED SUCCESSFULLY");
 
       if (response.ok) {
