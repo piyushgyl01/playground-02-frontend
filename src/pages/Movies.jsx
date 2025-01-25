@@ -142,7 +142,7 @@ export default function Movies() {
                     {movie.director || movie.directors}
                   </p>
                   <Link
-                    to={`/movies/movies-details/${movie._id}`}
+                    to={`/movie/movies-details/${movie._id}`}
                     className="btn btn-primary"
                   >
                     Movie Details
