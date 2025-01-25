@@ -1,10 +1,12 @@
+import { useState } from "react";
 import useFetch from "../useFetch";
 import Navbar from "../components/Navbar";
 import { useParams } from "react-router";
-import { useState } from "react";
 
 export default function MoviesDetail() {
   const [edit, setEdit] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
   const [editedData, setEditedData] = useState({
     title: "",
     genre: "",
@@ -19,24 +21,48 @@ export default function MoviesDetail() {
 
   const handleEdit = async () => {
     try {
-      fetch(`https://playground-02-backend.vercel.app/movies/${movieID}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(editedData),
-      });
-      console.log("EDITED SUCCESSFULLY");
-      setEdit(false);
+      const response = await fetch(
+        `https://playground-02-backend.vercel.app/movies/${movieID}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(editedData),
+        }
+      );
+      
+      if (response.ok) {
+        setToastMessage("Movie details updated successfully!");
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+        setEdit(false);
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.error("UNABLE TO EDIT THE DATA");
+      setToastMessage("Failed to update movie details");
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 3000);
     }
   };
 
   const movie = data?.find((movie) => movie._id === movieID);
+  
   return (
     <>
       <Navbar />
+      {showToast && (
+        <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
+          <div className="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div className="toast-header">
+              <strong className="me-auto">Notification</strong>
+              <button type="button" className="btn-close" onClick={() => setShowToast(false)}></button>
+            </div>
+            <div className="toast-body">{toastMessage}</div>
+          </div>
+        </div>
+      )}
       <main className="container my-5">
         {loading && <p className="text-center">Loading...</p>}
         {error && <p className="text-center">Error...</p>}
@@ -51,7 +77,6 @@ export default function MoviesDetail() {
                 >
                   Edit Details
                 </button>
-
                 <h5 className="card-title">{movie?.title}</h5>
                 <h6 className="card-subtitle mb-2 text-body-secondary">
                   By {movie?.directors}
@@ -71,13 +96,13 @@ export default function MoviesDetail() {
                 <h1 className="text-center mt-5">
                   Edit Details of {movie?.title}
                 </h1>
-                <div class="mb-3">
-                  <label for="titleInput" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="titleInput" className="form-label">
                     Movie Title:
                   </label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     id="titleInput"
                     value={editedData.title}
                     onChange={(e) =>
@@ -85,13 +110,13 @@ export default function MoviesDetail() {
                     }
                   />
                 </div>
-                <div class="mb-3">
-                  <label for="releaseDate" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="releaseDate" className="form-label">
                     Release Date:
                   </label>
                   <input
                     type="date"
-                    class="form-control"
+                    className="form-control"
                     id="releaseDate"
                     value={editedData.releaseDate}
                     onChange={(e) =>
@@ -102,13 +127,12 @@ export default function MoviesDetail() {
                     }
                   />
                 </div>
-                <div class="mb-3">
-                  <label for="genreSelect" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="genreSelect" className="form-label">
                     Movie Genre:
                   </label>
                   <select
-                    class="form-select form-select-lg mb-3"
-                    aria-label="Medium select example"
+                    className="form-select form-select-lg mb-3"
                     id="genreSelect"
                     value={editedData.genre}
                     onChange={(e) =>
@@ -124,13 +148,12 @@ export default function MoviesDetail() {
                     <option value="Drama">Drama</option>
                   </select>
                 </div>
-                <div class="mb-3">
-                  <label for="directorSelect" class="form-label">
+                <div className="mb-3">
+                  <label htmlFor="directorSelect" className="form-label">
                     Movie Director:
                   </label>
                   <select
-                    class="form-select form-select-lg mb-3"
-                    aria-label="Medium select example"
+                    className="form-select form-select-lg mb-3"
                     id="directorSelect"
                     value={editedData.directors}
                     onChange={(e) =>
@@ -146,9 +169,9 @@ export default function MoviesDetail() {
                   </select>
                 </div>
                 <button
-                  onClick={() => handleEdit()}
+                  onClick={handleEdit}
                   type="submit"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                 >
                   Save Changes
                 </button>
